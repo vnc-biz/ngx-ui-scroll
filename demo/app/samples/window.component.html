@@ -1,13 +1,12 @@
 <div class="header">
   <h1>Entire window scrolling demo</h1>
   <a class="navbar-link" routerLink="/">Home</a>
+  <a class="navbar-link" routerLink="https://github.com/dhilt/ngx-ui-scroll">GitHub</a>
 </div>
 
-<div *ngIf="init">
-  <div *uiScroll="let item of datasource" style="height: 20px;">
-    <b>{{item.text}}</b>
-    <span [style.color]="item.color">
+<div *uiScroll="let item of datasource" [style.height]="item.height + 'px'">
+  <b>{{item.text}}</b>
+  <span [style.color]="item.color">
       {{item.data}}
     </span>
-  </div>
 </div>

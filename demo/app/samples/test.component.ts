@@ -41,15 +41,15 @@ export class TestComponent {
     ,
     settings: {
       padding: 0.5,
-      bufferSize: 1,
+      bufferSize: 10,
       // minIndex: MIN,
-      // maxIndex: MAX,
+      // maxIndex: MAX + 1000,
       itemSize: 20,
       startIndex: 1
     },
     devSettings: {
       debug: true,
-      immediateLog: false,
+      // immediateLog: false,
       logTime: false,
       throttle: 40,
       inertia: false,
@@ -65,7 +65,7 @@ export class TestComponent {
         id: i + MIN,
         text: 'item #' + (i + MIN),
         isSelected: i % 15 === 0,
-        height: Math.max(MIN_ROW_HEIGHT, 20 + i + MIN)
+        height: 20 // Math.max(MIN_ROW_HEIGHT, 20 + i + MIN)
       };
       if (item.isSelected) {
         item.data = Array.from({ length: Math.random() * (10 - 3) + 3 }, (x, j) => '*').join('');

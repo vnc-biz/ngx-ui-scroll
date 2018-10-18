@@ -3,7 +3,10 @@ import { Process, ProcessStatus } from '../interfaces/index';
 
 export default class Scroll {
 
-  static run(scroller: Scroller) {
+  static run(scroller: Scroller, event?: Event) {
+    if (event && !event.isTrusted) {
+      return;
+    }
     scroller.logger.log(scroller.viewport.scrollPosition);
     if (scroller.state.syntheticScroll.position !== null) {
       if (!Scroll.processSyntheticScroll(scroller)) {

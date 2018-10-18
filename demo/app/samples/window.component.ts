@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 
 import { IDatasource } from '../../../public_api'; // from 'ngx-ui-scroll';
 
-const MAX = 100;
-const MIN = -899;
+const MAX = 1000;
+const MIN = -999;
+const MIN_ROW_HEIGHT = 5;
 
 @Component({
   selector: 'app-samples-window',
@@ -35,21 +36,16 @@ export class WindowComponent {
           data.push(item);
         }
       }
-      // setTimeout(() => success(data), 25);
       success(data);
     },
     settings: {
+      windowViewport: true,
       startIndex: 1,
-      padding: 0.25,
-      bufferSize: 1,
-      itemSize: 20,
-      // minIndex: MIN,
       // maxIndex: MAX,
-      windowViewport: true
-    },
-    devSettings: {
-      debug: true,
-      immediateLog: true
+      // minIndex: MIN,
+      padding: 0.25,
+      bufferSize: 10,
+      itemSize: 20
     }
   };
 

@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import { Workflow } from './component/workflow';
-import { Datasource as IDatasource } from './component/interfaces/index';
+import { IDatasource } from './component/interfaces/index';
 import { Datasource } from './component/classes/datasource';
 import { Item } from './component/classes/item';
 
@@ -33,12 +33,12 @@ import { Item } from './component/classes/item';
 })
 export class UiScrollComponent implements OnInit, OnDestroy {
 
-  // come from the directive
+  // these should come from the directive
   public version: string;
   public template: TemplateRef<any>;
   public datasource: IDatasource | Datasource;
 
-  // use in the template
+  // the only template variable
   public items: Item[] = [];
 
   // Component-Workflow integration

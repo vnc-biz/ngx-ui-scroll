@@ -134,13 +134,13 @@ export default class Adjust {
     }
 
     // if scrollable area size has not been changed during this cycle
-    if (viewport.getScrollableSize() === state.sizeBeforeRender) {
+    if (viewport.getScrollableSize() === state.render.sizeBefore) {
       return;
     }
 
     // to fill forward padding gap in case of no minIndex
     if (!isFinite(buffer.absMinIndex)) {
-      const fwdPaddingSizeDiff = state.fwdPaddingBeforeRender - viewport.paddings.forward.size;
+      const fwdPaddingSizeDiff = state.render.fwdPaddingBefore - viewport.paddings.forward.size;
       const diff = negativeSize - fwdPaddingSizeDiff;
       negativeSize = diff < 0 ? negativeSize : Math.min(negativeSize, diff);
     }
@@ -155,8 +155,8 @@ export default class Adjust {
   }
 
   static setScroll(scroller: Scroller, delta: number) {
-    const { viewport } = scroller;
-    const viewportSize = scroller.viewport.getSize();
+    const { viewport, settings: { inverse } } = scroller;
+    const viewportSize = viewport.getSize();
     const forwardPadding = viewport.paddings[Direction.forward];
     const oldPosition = viewport.scrollPosition;
     const newPosition = Math.round(oldPosition + delta);
@@ -165,7 +165,7 @@ export default class Adjust {
       const positionDiff = newPosition - viewport.scrollPosition;
       const viewportDiff = viewportSize - newPosition;
       const diff = Math.min(viewportDiff, positionDiff);
-      if (diff > 0) {
+      if (!inverse && diff > 0) {
         forwardPadding.size += diff;
       } else {
         break;

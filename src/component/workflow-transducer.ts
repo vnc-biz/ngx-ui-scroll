@@ -1,11 +1,13 @@
 import {
   Init,
   Scroll,
+  Reset,
   Reload,
   Append,
   Check,
   Remove,
   UserClip,
+  Insert,
   Fix,
   Start,
   PreFetch,
@@ -18,17 +20,12 @@ import {
   End
 } from './processes/index';
 
-import { Process, ProcessStatus as Status, ProcessSubject } from './interfaces/index';
-
-interface StateMachineParams {
-  input: ProcessSubject;
-  methods: {
-    run: Function;
-    interrupt: Function;
-    done: Function;
-    onError: Function;
-  };
-}
+import {
+  Process,
+  ProcessStatus as Status,
+  ProcessSubject,
+  StateMachineParams
+} from './interfaces/index';
 
 export const runStateMachine = ({
   input: { process, status, payload = {} },
@@ -62,12 +59,14 @@ export const runStateMachine = ({
         }
       }
       break;
+    case Process.reset:
     case Process.reload:
+      const processToRun = process === Process.reset ? Reset : Reload;
       if (status === Status.start) {
-        run(Reload)(payload);
+        run(processToRun)(payload);
       }
       if (status === Status.next) {
-        interrupt(process);
+        interrupt({ process, ...payload });
         if (payload.finalize) {
           run(End)(process);
         } else {
@@ -115,6 +114,14 @@ export const runStateMachine = ({
         run(Init)(process);
       }
       break;
+    case Process.insert:
+      if (status === Status.start) {
+        run(Insert)(payload);
+      }
+      if (status === Status.next) {
+        run(Init)(process);
+      }
+      break;
     case Process.fix:
       if (status === Status.start) {
         run(Fix)(payload);
@@ -129,6 +136,7 @@ export const runStateMachine = ({
           case Process.append:
           case Process.prepend:
           case Process.check:
+          case Process.insert:
             run(Render)();
             break;
           case Process.remove:
@@ -179,6 +187,9 @@ export const runStateMachine = ({
           run(PreClip)();
         }
       }
+      if (status === Status.done) {
+        run(End)(process);
+      }
       break;
     case Process.preClip:
       if (status === Status.next) {
@@ -206,6 +217,7 @@ export const runStateMachine = ({
     case Process.end:
       if (status === Status.next) {
         switch (payload.process) {
+          case Process.reset:
           case Process.reload:
             done();
             run(Init)(payload.process);

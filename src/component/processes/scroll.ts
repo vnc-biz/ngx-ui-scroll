@@ -154,6 +154,7 @@ export default class Scroll {
       scroller.logger.log(() => `setting the timer at ${scroller.state.time + diff}`);
       state.firstScrollTime = time;
       state.scrollTimer = <any>setTimeout(() => {
+        scroller.adapter.isLoading = false;
         state.scrollTimer = null;
         scroller.logger.log(() => `fire the timer (${scroller.state.time})`);
         workflowOptions.byTimer = true;
